@@ -8,60 +8,92 @@
 import SwiftUI
 import SwiftData
 
+@main
+struct Para_el_PedaApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+
+// Optional: Custom color for dark blue
+extension Color {
+    static let darkBlue = Color(red: 0, green: 0, blue: 139/255)
+}
+
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        NavigationStack {
+            VStack(spacing: 20) {
+                Text("Welcome to")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.gray)
+                
+                Text("Para El Peda 🍻")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.red)
+                
+                NavigationLink(destination: GameSelectionView()) {
+                    Text("Click to Play")
+                        .font(.title2)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
-                .onDelete(perform: deleteItems)
+                .padding(.horizontal)
+                .padding(.top, 40)
             }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Please select an item")
-            Text("Created by Jacob Sanchez")
+            .padding()
         }
     }
+}
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+// MARK: - Game Selection View
+struct GameSelectionView: View {
+    var body: some View {
+        VStack(spacing: 30) {
+            Text("Select a Game Mode")
+                .font(.title)
+                .fontWeight(.semibold)
+            
+            NavigationLink(destination: CardGameView()) { // CardGameView in separate file
+                Text("Card Game 🂠")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.darkBlue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
             }
+            .padding(.horizontal)
+            
+            NavigationLink(destination: BoardGameView()) { // BoardGameView is here
+                Text("Board Game 🎲")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.orange)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .padding(.horizontal)
         }
+        .padding()
+    }
+}
+
+// MARK: - Placeholder Board Game View
+struct BoardGameView: View {
+    var body: some View {
+        Text("Board Game Screen")
+            .font(.largeTitle)
+            .foregroundColor(.orange)
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

@@ -19,16 +19,20 @@ struct CardGameView: View {
             Text("Card Game 🂠")
                 .font(.largeTitle)
                 .fontWeight(.bold)
+                .foregroundColor(.black) // header in black
 
             if let card = currentCard {
                 Text(card.text)
                     .font(.title2)
                     .multilineTextAlignment(.center)
+                    .lineLimit(nil) // allow multiple lines
+                    .minimumScaleFactor(0.5)
                     .padding()
                     .frame(maxWidth: .infinity, maxHeight: 200)
                     .background(Color.white)
                     .cornerRadius(15)
                     .shadow(radius: 5)
+                    .foregroundColor(.black) // questions in black
             } else {
                 Text("Click 'Draw Next Card' to start! 🎉")
                     .font(.title2)
@@ -38,6 +42,7 @@ struct CardGameView: View {
                     .background(Color.white)
                     .cornerRadius(15)
                     .shadow(radius: 5)
+                    .foregroundColor(.black) // placeholder in black
             }
 
             Button(action: drawNextCard) {
@@ -57,6 +62,7 @@ struct CardGameView: View {
                 Text("Add Custom Cards")
                     .font(.title2)
                     .fontWeight(.bold)
+                    .foregroundColor(.black)
 
                 TextField("Enter a custom question", text: $customCardText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -66,7 +72,7 @@ struct CardGameView: View {
                     Button("Add Another") {
                         if !customCardText.isEmpty {
                             customCards.append(Card(text: customCardText))
-                            customCardText = "" // clear the text field
+                            customCardText = ""
                         }
                     }
                     .padding()

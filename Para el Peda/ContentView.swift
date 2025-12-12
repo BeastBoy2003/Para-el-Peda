@@ -40,7 +40,8 @@ struct ContentView: View {
                 }
             }
         } detail: {
-            Text("Select an item")
+            Text("Please select an item")
+            Text("Created by Jacob Sanchez")
         }
     }
 
